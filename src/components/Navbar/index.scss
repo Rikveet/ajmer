@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Mate');
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans');
+
+nav {
+
+  background: #1c2336;
+
+  .container-fluid {
+    .navbar-brand {
+      font-family: 'Mate', monospace;
+      font-size: xx-large;
+      color: #d8b586;
+    }
+    #navbarSupportedContent{
+      .nav-pills {
+        .nav-item {
+          .nav-link{
+            font-family: 'Encoded Sans', system-ui;
+            color: white;
+            border: solid 3px #d8b586;
+          }
+          .nav-link.active {
+              color: black;
+              background: #d8b586;
+          }
+        }
+      }
+    }
+
+  }
+}

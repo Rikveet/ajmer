@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {createBrowserRouter, RouterProvider,} from "react-router-dom";
-import FirebaseContextProvider from "./contexts/Firebase";
-import Home from "./routes/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import Navbar from "./components/Navbar/Navbar";
+import {createBrowserRouter, RouterProvider,} from "react-router-dom";
+import FirebaseContextProvider from "./contexts/Firebase";
+import Navbar from "./components/Navbar";
+import User from "./routes/User";
+import Home from "./routes/Home";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: <Home/>
+            },
+            {
+                path: 'user',
+                element: <User/>
             }
         ]
     },
