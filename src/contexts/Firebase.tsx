@@ -18,24 +18,30 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-function getFirebaseApp(): FirebaseApp {
-    const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
-    const db = getFirestore(firebaseApp);
-    if (!process.env.REACT_APP_SERVICE_MODE || process.env.REACT_APP_SERVICE_MODE === 'development') {
-        connectAuthEmulator(auth, "http://localhost:9099");
-        connectFirestoreEmulator(db, 'localhost', 8080);
+function getFirebaseApp(): FirebaseApp | null {
+    try{
+        const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
+        if (!process.env.REACT_APP_SERVICE_MODE || process.env.REACT_APP_SERVICE_MODE === 'development') {
+            connectAuthEmulator(auth, "http://localhost:9099");
+            connectFirestoreEmulator(db, 'localhost', 8080);
+        }
+
+        return firebaseApp;
+    }
+    catch (e) {
+        return null
     }
 
-    return firebaseApp;
 }
 
-export const FirebaseContext = React.createContext<FirebaseApp | undefined>(undefined);
+export const FirebaseContext = React.createContext<FirebaseApp | null>(null);
 
 function FirebaseContextProvider(props: { children: ReactNode }) {
-
+    const firebaseApp = getFirebaseApp();
     return (
-        <FirebaseContext.Provider value={getFirebaseApp()}>
+        <FirebaseContext.Provider value={firebaseApp}>
             {props.children}
         </FirebaseContext.Provider>
     );
