@@ -13,13 +13,18 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home/>,
+        element: <Navbar/>,
+        children: [
+            {
+                path: '',
+                element: <Home/>
+            }
+        ]
     },
 ])
 root.render(
     <React.StrictMode>
         <FirebaseContextProvider>
-            <Navbar/>
             <RouterProvider router={router}/>
         </FirebaseContextProvider>
     </React.StrictMode>
