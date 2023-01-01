@@ -36,14 +36,14 @@ function getFirebaseApp(): FirebaseApp | null {
 
 }
 
-export const FirebaseContext = React.createContext<FirebaseApp | null>(null);
+export const FirebaseAppContext = React.createContext<FirebaseApp | null>(null);
 
 function FirebaseContextProvider(props: { children: ReactNode }) {
     const firebaseApp = getFirebaseApp();
     return (
-        <FirebaseContext.Provider value={firebaseApp}>
+        <FirebaseAppContext.Provider value={firebaseApp}>
             {props.children}
-        </FirebaseContext.Provider>
+        </FirebaseAppContext.Provider>
     );
 }
 

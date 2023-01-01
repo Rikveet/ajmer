@@ -1,0 +1,55 @@
+.form-container {
+  width: 100vw;
+  display: flex;
+  height: 100vh;
+  background-image: url('https://images.unsplash.com/photo-1526386172983-95d2ae8a88a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1331&q=80');
+  background-size: cover;
+  align-items: flex-start;
+  justify-content: center;
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 15vh;
+    width: 40vw;
+    min-width: 300px;
+    max-width: 400px;
+    height: fit-content;
+    background: #1c2336;
+    border: #d8b586 solid 3px;
+    border-radius: 10px;
+    box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
+    .nav {
+      width: 100%;
+
+      .nav-item {
+        cursor: pointer;
+
+        a {
+          background: transparent;
+          color: white;
+
+          &:hover,&:active {
+            color: #d8b586
+          }
+
+        }
+      }
+    }
+
+    .container {
+      margin: 20px 10px;
+      form {
+        display: flex;
+        width: 100%;
+        height: fit-content;
+        flex-direction: column;
+        justify-content: space-around;
+        color: #d8b586
+      }
+    }
+  }
+
+}

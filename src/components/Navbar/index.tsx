@@ -1,12 +1,12 @@
 import React, {ReactNode, useContext, useEffect, useState} from 'react';
 import "./index.scss";
 import {Outlet, useLocation} from 'react-router-dom';
-import {FirebaseContext} from "../../contexts/Firebase";
+import {FirebaseAppContext} from "../../contexts/Firebase";
 import {getAuth} from "firebase/auth";
 
 function Navbar() {
     const location = useLocation();
-    const firebase = useContext(FirebaseContext);
+    const firebase = useContext(FirebaseAppContext);
     const [links, setLinks] = useState<{
         text: string | ReactNode,
         href?: string,
@@ -39,12 +39,13 @@ function Navbar() {
         } else {
 
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [firebase]);
     return (
         <div>
             <nav className="navbar navbar-expand-sm navbar-dark sticky-top">
                 <div className="container-fluid">
-                    <a className="navbar-brand">AJMER</a>
+                    <h1 className="navbar-brand" >AJMER</h1>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
@@ -58,7 +59,7 @@ function Navbar() {
                                             'nav-link' +
                                             (
                                                 link.href &&
-                                                location.pathname===link.href ?
+                                                location.pathname === link.href ?
                                                     " active" : ""
                                             ) +
                                             (
