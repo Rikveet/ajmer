@@ -1,6 +1,6 @@
 #user-container{
   background: black;
-  height: 90vh;
+  height: calc(100vh - 80px);
   width: 100vw;
   display: flex;
   justify-content: center;
