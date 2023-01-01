@@ -103,9 +103,11 @@ function Home() {
             "display": 'flex',
             'justifyContent': 'center',
             'alignItems': 'center',
-            'height': '90vh',
+            'height': 'calc(100vh - 80px)',
             'width': '100vw',
-            backgroundImage: "url('https://images.unsplash.com/photo-1524813686514-a57563d77965?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1524813686514-a57563d77965?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8')",
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
         }}>
             {
                 loading ?
