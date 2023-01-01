@@ -2,7 +2,7 @@ import * as React from "react";
 import {ReactNode, useState} from "react";
 
 
-type UserIDT = { uid: string | null, set: { (uid: string): void } }
+type UserIDT = { uid: string | null, set: { (uid: string | null): void } }
 
 export const UserIDContext = React.createContext<UserIDT>({} as unknown as UserIDT);
 
