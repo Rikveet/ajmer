@@ -7,47 +7,13 @@ import './index.scss';
 import {ConfirmPasswordInput, EmailInput, PasswordInput} from "../../Shared";
 import {FirebaseAppContext} from "../../../contexts/Firebase";
 import {ModalMessageContext} from "../../../contexts/ModalMessageHandler";
-import {
-    createUserWithEmailAndPassword,
-    fetchSignInMethodsForEmail,
-    getAuth,
-    sendEmailVerification,
-    signInWithEmailAndPassword,
-    UserCredential
-} from "firebase/auth";
-import {UserIDContext} from "../../../contexts/UserID";
+import {createUserWithEmailAndPassword, fetchSignInMethodsForEmail, getAuth, sendEmailVerification, signInWithEmailAndPassword} from "firebase/auth";
 
-const UserVerificationAddon = (props: { userCredentials: UserCredential }) => {
-    const [emailSent, setEmailSent] = useState(false);
-    const [processing, setProcessing] = useState(false);
-    const [buttonText, setButtonText] = useState("Send Another Request");
-
-    return (<div className={'d-flex justify-content-center mb-2'}>
-        <Button
-            disabled={emailSent || processing}
-            onClick={
-                async () => {
-                    setProcessing(true)
-                    try {
-                        await sendEmailVerification(props.userCredentials.user)
-                        setButtonText('Email Sent')
-                    } catch (e) {
-                        setButtonText('Failed')
-                    }
-                    setProcessing(false)
-                    setEmailSent(true)
-                }
-            }>
-            {processing ? <Loading/> : buttonText}
-        </Button>
-    </div>)
-}
 export const LoginSignupForm = () => {
     const [formType, setFormType] = useLocalStoredState('form_type');
     const [inputsValid, setInputsValid] = useState(false);
     const email = useValidatedRef(
         (email: string) => {
-
             const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return regex.test(email);
         });
@@ -67,17 +33,16 @@ export const LoginSignupForm = () => {
     }
     const firebaseApp = useContext(FirebaseAppContext);
     const setAlert = useContext(ModalMessageContext);
-    const UserID = useContext(UserIDContext);
     const [processingRequest, setProcessingRequest] = useState(false);
 
     useEffect(() => {
         setInputsValid(formButtonValidation())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formType])
     const formSubmit = async () => {
         if (firebaseApp) {
             const auth = getAuth(firebaseApp)
-            const checkIfAccountExists =  async () => {
+            const checkIfAccountExists = async () => {
                 const possibleLogins = await fetchSignInMethodsForEmail(auth, email.ref.current!.value);
                 return possibleLogins.length > 0;
             }
@@ -90,18 +55,9 @@ export const LoginSignupForm = () => {
                     try {
                         setProcessingRequest(true);
                         if (await checkIfAccountExists()) {
-                            const userCredentials = await signInWithEmailAndPassword(auth, email.ref.current!.value, password.ref.current!.value)
-                            if (!userCredentials.user.emailVerified) {
-                                setAlert('Please check your email for the verification email and verify the account.',
-                                    'Account Not Verified',
-                                    <UserVerificationAddon userCredentials={userCredentials}/>
-                                )
-                                await auth.signOut()
-                            } else {
-                                UserID.set(userCredentials.user.uid)
-                            }
+                            await signInWithEmailAndPassword(auth, email.ref.current!.value, password.ref.current!.value)
                         } else {
-                            setAlert('User does not exist.', 'Account Error')
+                            setAlert('Account does not exist.', 'Account Error')
                         }
                         setProcessingRequest(false);
                     } catch (e) {
@@ -119,16 +75,11 @@ export const LoginSignupForm = () => {
                         setProcessingRequest(true);
                         if (await checkIfAccountExists()) {
                             setAlert('Account already exists.', 'Invalid Email')
-                        }
-                        else{
+                        } else {
                             const userCredentials = await createUserWithEmailAndPassword(auth, email.ref.current!.value, password.ref.current!.value);
                             await sendEmailVerification(userCredentials.user)
                             await auth.signOut();
-                            setAlert('Please confirm your account by following the steps sent in the confirmation email. The email has been' +
-                                ' sent on the account you registered with. Please make sure to check your spam or junk folder if the' +
-                                ' confirmation' +
-                                ' email is not visible in the inbox. You can request another email while logging in.', 'Account' +
-                                ' Created')
+                            setAlert('Please confirm your account by following the steps sent in the confirmation email. The email has been sent on the account you registered with. Please make sure to check your spam or junk folder if the confirmation email is not visible in the inbox. You can request another email while logging in.', 'Account Created')
                             setFormType('login')
                         }
                         setProcessingRequest(false);
@@ -147,7 +98,7 @@ export const LoginSignupForm = () => {
     }
 
     return (
-        <div className={'form-container'}>
+        <div className={'form-container'} id={'login-signup-form'}>
             <div className={'form'}>
                 <Nav variant="tabs" defaultActiveKey={formType === 'sign-up' ? "Sign-Up" : 'Login'}>
                     <Nav.Item>
@@ -165,7 +116,8 @@ export const LoginSignupForm = () => {
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
-                            formSubmit().then(r => {}) // if need to do anything in future
+                            formSubmit().then(r => {
+                            }) // if need to do anything in future
                         }}
                         onChange={() => {
                             setInputsValid(formButtonValidation())

@@ -4,6 +4,7 @@ import {ReactNode} from 'react';
 import {FirebaseApp, getApp, getApps, initializeApp} from "firebase/app";
 import {connectAuthEmulator, getAuth} from "firebase/auth";
 import {connectFirestoreEmulator, getFirestore} from "firebase/firestore";
+import {getStorage, connectStorageEmulator} from 'firebase/storage';
 
 
 // Your web app's Firebase configuration
@@ -23,17 +24,17 @@ function getFirebaseApp(): FirebaseApp | null {
         const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
-        if (!process.env.REACT_APP_SERVICE_MODE || process.env.REACT_APP_SERVICE_MODE === 'development') {
+        const storage = getStorage(firebaseApp)
+        if (process.env.REACT_APP_DEVELOPEMENT_MODE==='true') {
             connectAuthEmulator(auth, "http://localhost:9099");
             connectFirestoreEmulator(db, 'localhost', 8080);
+            connectStorageEmulator(storage,'localhost',9199)
         }
-
         return firebaseApp;
     }
     catch (e) {
         return null
     }
-
 }
 
 export const FirebaseAppContext = React.createContext<FirebaseApp | null>(null);

@@ -67,9 +67,10 @@ export const Loading = ()=>{
     };
 
     const loadingCircleTransition = {
-        duration: 0.5,
+        duration: 0.8,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: [0.6, 0.2, 0.25, 1],
+        times: [0, 0.02, 0.98, 1],
     };
     return (
         <motion.div

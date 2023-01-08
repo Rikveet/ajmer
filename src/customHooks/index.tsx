@@ -1,7 +1,15 @@
 import React, {useRef, useState} from "react";
 
-export const useLocalStoredState = (key: string, defaultValue: string = '') => {
-    const initVal = localStorage.getItem(key) !== null ? localStorage.getItem(key) as string : defaultValue;
+export const useLocalStoredState = (key: string, defaultValue: string = '', possibleValues?: string[]) => {
+    let initVal=defaultValue;
+    if(localStorage.getItem(key) !== null){
+        if(!possibleValues){
+            initVal = localStorage.getItem(key) as string
+        }
+        else if(possibleValues && possibleValues.indexOf(localStorage.getItem(key) as string)!==-1){
+            initVal = localStorage.getItem(key) as string
+        }
+    }
     const [value, setValue] = useState<string>(initVal);
     const set = (val: string) => {
         localStorage.setItem(key, val);
@@ -10,12 +18,12 @@ export const useLocalStoredState = (key: string, defaultValue: string = '') => {
     return [value, set] as [string, { (val: string): void }]
 }
 
-export type ValidatedRef = {ref:React.RefObject<HTMLInputElement>, validate: {():boolean}}
+export type ValidatedRef = { ref: React.RefObject<HTMLInputElement>, validate: { (): boolean } }
 export const useValidatedRef = (validationFunction: { (...args: string[]): boolean },
-                                additionalRefs?: React.RefObject<HTMLInputElement>[]) : ValidatedRef => {
+                                additionalRefs?: React.RefObject<HTMLInputElement>[]): ValidatedRef => {
     const ref = useRef<HTMLInputElement>(null);
     return {
-        ref: ref, validate: () : boolean => {
+        ref: ref, validate: (): boolean => {
             if (additionalRefs) {
                 const currentValues = additionalRefs.reduce((currentValues: string[], additionalRef: React.RefObject<HTMLInputElement>) => {
                     if (additionalRef.current?.value) {

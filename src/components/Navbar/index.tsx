@@ -5,11 +5,13 @@ import {FirebaseAppContext} from "../../contexts/Firebase";
 import {getAuth} from "firebase/auth";
 import {UserIDContext} from "../../contexts/UserID";
 import {Nav} from "react-bootstrap";
+import {ModalMessageContext} from "../../contexts/ModalMessageHandler";
 
 function Navbar() {
     const location = useLocation();
     const firebase = useContext(FirebaseAppContext);
     const userID = useContext(UserIDContext);
+    const setAlert = useContext(ModalMessageContext);
 
     const defaultLinks = [
         {text: 'Home', href: '/'},
@@ -25,17 +27,15 @@ function Navbar() {
     }[]>([...defaultLinks]);
     useEffect(() => {
         if (firebase) {
-            if (userID.uid) {
+            if (userID) {
                 setLinks([...defaultLinks,
                     {
                         text: "Log-Out",
                         onClick: async () => {
                             try {
-                                const auth = getAuth(firebase);
-                                await auth.signOut()
-                                userID.set(null)
+                                await getAuth().signOut()
                             } catch (e) {
-
+                                setAlert('Unable to process the logout request', 'Failed to logout')
                             }
                         }
                     }])
@@ -46,7 +46,7 @@ function Navbar() {
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userID.uid]);
+    }, [userID]);
     const nav = useNavigate()
     return (
         <div>

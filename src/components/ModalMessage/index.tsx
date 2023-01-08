@@ -1,16 +1,20 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import './index.scss';
+
+export type CloseButtonCustomizationT = {text: string, callBack?: {():boolean}}
+
 function ModalMessage(props: {
     title: string,
     message: string,
     close: Function,
-    AdditionalContent?: ReactNode
+    AdditionalContent?: ReactNode,
+    closeButtonCustomization?: CloseButtonCustomizationT,
     customInput?: {
         customInputFields: ReactNode,
         customButtonCallBack: Function
     }
 }) {
-    const {title, message, close, AdditionalContent, customInput} = {...props}
+    const {title, message, close, AdditionalContent, closeButtonCustomization, customInput} = {...props}
     const [errorCss, setErrorCss] = useState({'display': 'none'});
     const [errorClass, setErrorClass] = useState('modal fade');
     useEffect(() => {
@@ -24,7 +28,6 @@ function ModalMessage(props: {
         setErrorCss({'display': 'none'})
         close()
     }
-
 
     return (
         <div className={errorClass}
@@ -54,8 +57,14 @@ function ModalMessage(props: {
                         <button type="button"
                                 className="btn btn-secondary"
                                 data-dismiss="modal"
-                                onClick={_close}>
-                            Close
+                                onClick={()=>{
+                                    console.log('checking custom callback, ',closeButtonCustomization?.callBack, closeButtonCustomization?.callBack && !closeButtonCustomization.callBack())
+                                    if(closeButtonCustomization?.callBack && !closeButtonCustomization.callBack()){
+                                        return
+                                    }
+                                    _close()
+                                }}>
+                            {closeButtonCustomization ?closeButtonCustomization.text:'Close'}
                         </button>
                     </div>
                 </div>

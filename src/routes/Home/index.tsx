@@ -1,103 +1,18 @@
-import React, {useEffect, useState} from "react";
-import {createApi} from "unsplash-js";
+import React from "react";
 import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
 import {Card, Carousel, Col, Container, ListGroup, Row} from "react-bootstrap";
 import {LatLngTuple} from "leaflet";
-import {v4 as uuid} from 'uuid';
 import './index.scss';
 import {ImMail4} from "react-icons/im";
 import {BsFillTelephoneFill} from "react-icons/bs";
 import {Loading} from "../../components/motions";
+import {ListingsT} from "../../components/Shared";
 
 
-const randomEmail = require('random-email');
-const createMobilePhoneNumber = require("random-mobile-numbers");
-const Fakerator = require("fakerator");
-const fakerator = Fakerator("en-CA");
-
-
-type DataFromFakeGenerator = {
-    first_name: string,
-    last_name: string,
-    location: {
-        street: string,
-        city: string,
-        state: string,
-        country: string
-    },
-    contacts: {
-        email: string,
-        mobile: string
-    },
-}
-type Listings = { info: DataFromFakeGenerator, images?: { id: string, url: string, description: string }[], location: LatLngTuple, uuid: string }[]
-
-const generateFakeData = async (loadData: React.Dispatch<React.SetStateAction<Listings>>) => {
-    const getRandomInRange = (min: number, max: number): number => {
-        return parseFloat(Math.floor(Math.random() * (max - min + 1) + min).toString())
-    }
-    let compiledData: Listings = [];
-    const unsplash = createApi({accessKey: process.env.REACT_APP_FAKE_IMAGE_API_TOKEN as string});
-
-    const data: DataFromFakeGenerator[] = []
-    for (let i = 0; i < 10; i++) {
-        data.push({
-            contacts: {email: randomEmail(), mobile: createMobilePhoneNumber('USA')},
-            first_name: fakerator.names.firstName(),
-            last_name: fakerator.names.lastName(),
-            location: {
-                city: fakerator.address.city(),
-                country: fakerator.address.country(),
-                state: fakerator.address.city(),
-                street: fakerator.address.street()
-            }
-        })
-    }
-    for (const entry of data) {
-        try {
-            const result = await unsplash.photos.getRandom({
-                query: 'house interior',
-                count: 5
-            });
-            compiledData.push({
-                info: {...entry},
-                location: [43.000000 + getRandomInRange(602910, 813591) / 1000000, -79.000000 - getRandomInRange(727310, 786340) / 1000000],
-                uuid: uuid(),
-                images:
-                    (result.response as
-                        {
-                            id: string,
-                            description: string,
-                            urls: { full: string }
-                        }[]).map(
-                        image => ({
-                            id: image.id,
-                            url: image.urls.full,
-                            description: image.description
-                        }))
-            })
-        } catch (e) {
-            compiledData.push({
-                info: {...entry},
-                location: [43.000000 + getRandomInRange(602910, 813591) / 1000000, -79.000000 - getRandomInRange(727310, 786340) / 1000000],
-                uuid: uuid()
-            })
-        }
-    }
-    loadData(compiledData)
-}
-
-function Home() {
-    const [listings, setListings] = useState<Listings>([]);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        generateFakeData(setListings).then(() => {
-            setLoading(false)
-        })
-    }, []);
+function Home(props: {listings: ListingsT, loading: boolean}) {
     //813591,727310
     //602910,786340
-
+    const {loading, listings} = {...props}
     return (
         <div style={{
             "display": 'flex',
