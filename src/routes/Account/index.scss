@@ -1,0 +1,27 @@
+#user-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: calc(100vh - 80px);
+  background-image: url('https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80');
+  background-size: cover;
+  #user-div{
+    width: 80%;
+    max-width: 400px;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-top: 60px;
+    .dropdown{
+      position: absolute;
+      margin-top: 10px;
+      left: 0;
+      top: 0;
+    }
+  }
+}

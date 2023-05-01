@@ -1,0 +1,12 @@
+#about-form{
+  height: fit-content;
+  background: #1c2336;
+  border: #d8b586 solid 3px;
+  border-radius: 10px;
+  color: white;
+  .form{
+    width: 50vw;
+    min-width: 320px;
+    max-width: 600px;
+  }
+}
